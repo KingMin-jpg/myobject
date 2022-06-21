@@ -119,6 +119,7 @@ class OrderDetail(models.Model):
     quantity = models.IntegerField()  # 数量
     status = models.IntegerField(default=1)  # 状态:1正常/9删除
 
+
     class Meta:
         db_table = "order_detail"  # 更改表名
 
