@@ -1,0 +1,39 @@
+{% extends 'mobile/base.html' %}
+{% load static from staticfiles %}
+{% block mainbody %}
+
+    <!--头部-->
+    <header>
+        <div class="header">
+            <h1>切换店铺</h1>
+            <a href="{% url 'mobile_register' %}" class="return"><i></i></a>
+        </div>
+    </header>
+
+    <!--内容区-->
+    <article class="main-container">
+
+        <!--产品-->
+        <div class="list-content cartlist order-Pro">
+            <ul>
+                {% for shop in shoplist %}
+                    <li class="line select">
+                        <a href="{% url 'mobile_selectShop' %}?sid={{ shop.id }}">
+                            <div class="pro-img">
+                                <img src="{% static 'uploads/shop' %}/{{ shop.cover_pic }}" width="90" height="67.5" alt="">
+                            </div>
+                            <div class="pro-con">
+                                <h3>{{ shop.name }}</h3>
+                                <p>电话：{{ shop.phone }}</p>
+                                <p>{{ shop.address }}</p>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </article>
+
+
+{% endblock %}

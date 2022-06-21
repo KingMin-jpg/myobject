@@ -1,0 +1,65 @@
+{% extends 'mobile/base.html' %}
+{% load static from staticfiles %}
+{% block mainbody %}
+
+    <!--头部-->
+    <header>
+        <div class="header">
+            <h1>我的订单</h1>
+            <a href="{% url 'mobile_member_index' %}" class="return"><i></i></a>
+        </div>
+    </header>
+
+    <!--内容区-->
+    <article class="main-container">
+
+        <!--选项卡-->
+        <nav id="memberOrder-nav" class="memberOrder-nav">
+            <a href="{% url 'mobile_member_orders' %}?status=0" class="select">全部</a>
+            <a href="{% url 'mobile_member_orders' %}?status=1">排队中</a>
+            <a href="{% url 'mobile_member_orders' %}?status=3">已完成</a></nav>
+        <div class="memberOrder-header"></div>
+
+        <!--列表-->
+        {% for order in orderslist %}
+            <div class="memberOrder-list line" onclick="location.href='{% url 'mobile_member_detail' %}?pid={{ order.id }}'">
+                <p>订单编号：{{ order.id }}<span>（{{ order.statusinfo }}）</span></p>
+                <div class="order-product line">
+                    <ul>
+                        <li>
+                            {% for product in order.plist %}
+                                <img src="{% static 'uploads/product' %}/{{ product.product.cover_pic }}" alt="">
+                                <a>{{ product.cover_pic }}</a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+                <p>
+                    <b>共<span>{{ order.plist.count }}</span>件，总价：<span>￥{{ order.money }}</span></b> &nbsp;&nbsp;
+                    <!-- .count读取查询集的长度 -->
+                    <b>下单时间：</b>{{ order.create_at|date:'Y-m-d H:i:s' }}
+                </p>
+            </div>
+        {% endfor %}
+
+    </article>
+
+{% endblock %}
+
+{% block myjavascript %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        const a = $('#memberOrder-nav a');
+        a.removeClass('select');
+
+        let b;
+        $('#memberOrder-nav a').each(function (i) {
+            if ($(this).attr('href').split('=')[1] === window.location.href.split('=')[1]) {
+                b = $(this);
+            }
+        });
+        b.addClass('select');
+    });
+
+</script>
+{% endblock %}

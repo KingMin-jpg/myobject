@@ -1,0 +1,73 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'web/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'web/css/bootstrap.css' %}">
+
+    <script src="{% static 'web/js/jquery.min.js' %}"></script>
+    <script src="{% static 'web/js/bootstrap.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('.reverify').click(function () {
+                $(".verify").attr('src', $(".verify").attr('src') + '?' + 1)
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 class="form-heading">login Form</h1>
+    <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+                <h2 style="font-size:26px;">点 餐 系 统 登 录 页 面</h2>
+            </div>
+            <form action="{% url 'web_dologin' %}" method="post">
+            {% csrf_token %}
+                <div class="form-group">
+                    <select name="shop_id" class="form-control">
+                        <option value="0"> - - 请选择商铺名称 - - </option>
+                        {% for shop in shoplist %}
+                            <option value="{{ shop.id }}">{{ shop.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="登录账号">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="pass" class="form-control" placeholder="登录密码">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="verify" style="display:inline;width:120px;float:left;" class="form-control"
+                           placeholder="验证码">
+                    <img class="verify" style="padding: 10px 0" src="{% url 'web_verify' %}"/>
+                    <div class="reverify"
+                         style="z-index:999;width: 101px;height: 27px;border: 1px red;position: absolute;left: 778px;top: 353px"></div>
+                </div>
+
+                <button type="submit" style="margin-top:10px" class="btn btn-primary">登录</button>
+
+                <div class="form-group">
+                    <p class="login-box-msg" style="color:red">
+                        {% if request.GET.errinfo == '1' %}
+                            账号或密码错误！
+                        {% elif request.GET.errinfo == '2' %}
+                            验证码错误！
+                        {% elif request.GET.errinfo == '3' %}
+                            用户名不存在！
+                        {% elif request.GET.errinfo == '4' %}
+                            请选择店铺！
+                        {% endif %} 
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
